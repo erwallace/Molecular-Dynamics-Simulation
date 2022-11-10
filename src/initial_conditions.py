@@ -1,9 +1,10 @@
 import random
 import numpy as np
 
+
 def parameters():
     ''' this function contains all parameters required for the run_md function,
-    allowing consistnecy between functions as all additional functions will
+    allowing consistency between functions as all additional functions will
     initially call parameters to set their parameter values.
     
     Inputs
@@ -27,7 +28,7 @@ def parameters():
         epsilon value for Lennard-Jones potential
     t_eq: int
         length of equilibration period of simulation in seconds (before any 
-        mesurements are taken)
+        measurements are taken)
     '''
     
     dt = 0.005  # parameters[0]: time step is 5 ms
@@ -40,19 +41,20 @@ def parameters():
 
     return dt, L, NP, time, s, e, t_eq
 
+
 def lattice_density(density):
     ''' this function creates a lattice regular 3 dimensional lattice and then 
     removes particles at random until the density is equal to the function 
     input.
 
-    WARNING: this fucntion should not currently be used as you should not be 
+    WARNING: this function should not currently be used as you should not be
     specifying density, L and NP as they are linked via density=NP/(L**3), 
     assuming mass = 1
 
     Inputs
     ------
     density: float
-        must take a value 0 < dnesity <= 1. This is the desired density of the 
+        must take a value 0 < density <= 1. This is the desired density of the
         initial particle configuration
 
     Outputs
@@ -75,7 +77,7 @@ def lattice_density(density):
     n_par_actual = int(n_particles*density)
 
     # random list of particles to be removed form lattice
-    to_rmv = [random.randint(0, NP) for i in range(int(n_particles-n_par_actual))]
+    to_rmv = [random.randint(0, NP) for _ in range(int(n_particles-n_par_actual))]
     to_rmv.sort(reverse=True)
 
     # remove particles from lattice
@@ -93,6 +95,7 @@ def lattice_density(density):
     
     return r_lattice
 
+
 def random_r():
     
     ''' this function randomly assigns initial particle positions within a 
@@ -108,7 +111,7 @@ def random_r():
         ...     
     '''
 
-    #import parameters
+    # import parameters
     params = parameters()
     L = params[1]
     NP = params[2]
@@ -117,6 +120,7 @@ def random_r():
     r_random = L*np.reshape(r_random, (NP, 3))
 
     return r_random
+
 
 def random_v():
     ''' this function randomly generates (unscaled) initial velocities of all
@@ -136,16 +140,16 @@ def random_v():
     params = parameters()
     NP = params[2]
 
-    vavg = [0]
+    v_avg = [0]
     v = np.zeros((NP, 3))
 
     for i in range(NP):
-        v[i] = np.random.uniform(-0.2,0.2,3)
-        vavg += v[i]
+        v[i] = np.random.uniform(-0.2, 0.2, 3)
+        v_avg += v[i]
 
-    vavg = vavg/NP
+    v_avg = v_avg/NP
 
     for i in range(NP): # this ensures that the velocity of the COM is 0
-        v[i] += -vavg
+        v[i] += -v_avg
 
     return v
