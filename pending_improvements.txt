@@ -1,8 +1,6 @@
 CODE IMPROVEMENTS
 -----------------
 - reformat top_level.py so that it can be run start to finish (i.e. to find relaxation time and implement)
-- check what duration is needed for vcf cumulative integral to converge (is 3 x relaxation time enough?)
-- how do I determine an appropriate equilibration period?
 - add animation feature
 - write set of code to calculate/plot msd
 - add logger library instead of printing everything
@@ -12,10 +10,7 @@ CODE IMPROVEMENTS
 FORMATTING FOR GITHUB
 ---------------------
 - add requirements.txt
-- convert parameters function to dictionary or config file
-- move md.py into src (source) directory
-- expand README.md to include running instructions, background, and stylistic choices (e.g. what formatted did you use)
-- research and implement os library (vsc f5 will give different ways of running a file)
+- add example_plots folder with plt plots
 
 N.B. on my laptop, a simulation with 172 particles for 1 second took 130 seconds. I recommend performing a similar calculation
 on your own system so that you can approximate how long a given simulation will take. MD simulations scale linearly with time
