@@ -10,6 +10,7 @@ duration_time = time
 duration_steps = int(time/dt)
 # these are called and set as global variables 
 
+
 def msd(r_):
     ''' this function calculates the mean squared deviation of the simulation 
     for each step
@@ -23,10 +24,10 @@ def msd(r_):
     Outputs
     -------
     _msd: np.array(N) 
-        the mean sqaured deviation for each time step
+        the mean squared deviation for each time step
     '''
 
-    # Introduce a delay AND how many steps it will go calcualte over. 
+    # Introduce a delay AND how many steps it will go calculate over.
     # Has to be longer than the relaxation period of the system. 
 
     params = ic.parameters()
@@ -39,22 +40,23 @@ def msd(r_):
     for n in range(N):
         r_sum = 0
         for i in range(NP):
-            r_sum += np.linalg.norm(dr[n,i,:])
+            r_sum += np.linalg.norm(dr[n, i, :])
         msd_[n] = r_sum 
 
     return msd_   
 
+
 def vcf(v, t_start=0):
-    ''' this function calculates the velocity autocorrelation function of the 
+    ''' this function calculates the velocity autocorrelation function of the
     simulation for each step from an initial time for a specific duration 
-    (currently 3x the relaxation period).
+    (the default is 3x the relaxation period).
 
     Inputs
     ------
     v: np.array(N+1, NP, 3)
         velocities of all particles at each time step
     t_start: float
-        time at which the vcf begins being calcualted. Must be greater than the 
+        time at which the vcf begins being calculated. Must be greater than the
         equilibration time.
 
     Outputs
@@ -82,6 +84,7 @@ def vcf(v, t_start=0):
         vcf_[n-step_start] = v_sum 
 
     return vcf_
+
 
 def output_to_csv(array, vcf_or_msd, temp):
     ''' this function exports vcf values to a csv file for all repeats of a 
@@ -127,6 +130,7 @@ def output_to_csv(array, vcf_or_msd, temp):
     df.to_csv(f'{vcf_or_msd}_T{temp}.csv')
 
     print(f'{vcf_or_msd}_T{temp}.csv created \n')
+
 
 def multiple_vcfs(temps, repeats, time_to_relax, duration=3):
     ''' this function runs md simulations and outputs the vcf results to a csv.
@@ -192,6 +196,7 @@ def multiple_vcfs(temps, repeats, time_to_relax, duration=3):
     for temp in temps:
         md_out = md.run_md(ic.lattice_density(0.8), ic.random_v(), temp)
     '''
+
 
 def vcf_pre_plot(temps, repeats, time_to_relax):
     ''' this function expands the current cvs to include all vcf derived values
