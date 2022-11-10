@@ -1,0 +1,10 @@
+dt = 0.005
+L = 6
+NP = 172
+time = 0.6
+s = 1.0
+e = 1.0
+t_eq = 0.0
+temperatures = [0.2]
+no. vcf measurements per temp= 1
+relaxation period = 0.2
