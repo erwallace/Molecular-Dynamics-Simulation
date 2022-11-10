@@ -1,9 +1,10 @@
 import initial_conditions as ic
 
+
 def simulation_parameters(temps, repeats, time_to_relax):
     '''
     This function creates a file and outputs all variables used in the simulation for 
-    future refernce.
+    future reference.
     
     Inputs
     ------
@@ -22,7 +23,6 @@ def simulation_parameters(temps, repeats, time_to_relax):
     params = ic.parameters()
 
     with open('simulation_parameters.txt', 'w') as outfile:
-        #outfile.write(f'')
         print(f'dt = {params[0]}',
               f'L = {params[1]}',
               f'NP = {params[2]}',
