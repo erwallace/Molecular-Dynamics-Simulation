@@ -6,6 +6,7 @@ import initial_conditions as ic
 import md
 import calculations as calc
 
+# matplotlib presets
 mpl.rcParams['axes.labelsize'] = 15
 mpl.rcParams['lines.linewidth'] = 1
 mpl.rcParams['lines.markersize'] = 5
@@ -16,6 +17,7 @@ mpl.rcParams['ytick.direction'] = 'in'
 mpl.rcParams['xtick.top'] = True
 mpl.rcParams['ytick.right'] = True
 mpl.rcParams['axes.linewidth'] = 1.2
+
 
 def vcf_relaxation_period(temps):
     ''' this function produces a plot of vcf vs. time to indicate the relaxation 
@@ -52,8 +54,8 @@ def vcf_relaxation_period(temps):
         md_out = md.run_md(ic.lattice_density(0.8), ic.random_v(), temps[i])
         v = md_out[2]
         vcf_ = calc.vcf(v)
-        # no baseline correction (need to know relaxtion time first), just see when it decays to constant value
-        ax.plot(t_axis[1:], vcf_[1:], label=f'T={temps[i]}') # excludes t=0.0s data
+        # no baseline correction (need to know relaxation time first), just see when it decays to constant value
+        ax.plot(t_axis[1:], vcf_[1:], label=f'T={temps[i]}')  # excludes t=0.0s data
 
     '''
     try replacing with:
@@ -66,9 +68,10 @@ def vcf_relaxation_period(temps):
     ax.legend()
     plt.savefig('vcf_relaxation_period.pdf')
 
+
 def vcf_plot(temps, normalised=True, x_axis_length=0, additional_name=''):
     ''' this function produces a plot of (un)normalised vcf vs. time for a 
-    variety of tempertures.
+    variety of temperatures.
 
     Inputs
     ------
@@ -78,10 +81,10 @@ def vcf_plot(temps, normalised=True, x_axis_length=0, additional_name=''):
         gives a choice of whether you the plot produced will have a normalised 
         (to 1) vcf values
     x_axis_length: float
-        length of the plots x axis in seconds. If not specified then all data 
+        length of the plots x-axis in seconds. If not specified then all data
         will plotted
-    additonal_name: string
-        allows any additonal notes to be added to the name of the output file
+    additional_name: string
+        allows any additional notes to be added to the name of the output file
     
     Outputs
     -------
@@ -100,7 +103,6 @@ def vcf_plot(temps, normalised=True, x_axis_length=0, additional_name=''):
     for i in range(len(temps)):
         
         df = pd.read_csv(f'vcf_T{temps[i]}.csv')
-        '''path issue: files are created a directory above this where it's looking for them'''
 
         if x_axis_length != 0: 
             x_axis_steps = int(x_axis_length/dt)
@@ -120,11 +122,11 @@ def vcf_plot(temps, normalised=True, x_axis_length=0, additional_name=''):
             plt.savefig(f'vcf_unnormalised_{additional_name}.pdf')
 
 def vcf_integral(temps):
-    ''' this function produces a plot of the cummulative integral of the vcf vs.
-    time for a variety of temperatures. The cummulative integral is calculated 
+    ''' this function produces a plot of the cumulative integral of the vcf vs.
+    time for a variety of temperatures. The cumulative integral is calculated
     from the unnormalised vcf vs. time plot. 
 
-    The value of the each line tends towards the diffusion constant at that 
+    The value of each line tends towards the diffusion constant at that
     temperature as time tends to infinity.
 
     Inputs
@@ -135,12 +137,12 @@ def vcf_integral(temps):
     Outputs
     -------
     vcf_cum_integral.pdf: plot
-        plot of cummulative integral vs. time for a range of temperatures
+        plot of cumulative integral vs. time for a range of temperatures
     '''
 
     fig, ax = plt.subplots(nrows=1, ncols=1)
     ax.set_xlabel('Time / s')
-    ax.set_ylabel('Cummulative Integral')
+    ax.set_ylabel('Cumulative Integral')
 
     for i in range(len(temps)):
         
@@ -150,6 +152,3 @@ def vcf_integral(temps):
 
         ax.legend()
         plt.savefig('vcf_cum_integral.pdf')
-
-s = '06:40:03AM'
-print(s[:-2])
