@@ -8,7 +8,7 @@ print(f'\nThis simulation started at {simulation_start} \n')
 t_start = time.perf_counter()
 
 # define variables
-temps = [0.2, 0.4, 0.6, 0.8] # units of LJs ε
+temps = [0.2, 0.4, 0.6, 0.8]  # units of LJs ε
 n_vcf_measurements = 20
 relax_time = 0.3
 
