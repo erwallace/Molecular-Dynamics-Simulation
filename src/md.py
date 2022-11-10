@@ -5,9 +5,10 @@ from pickle import FALSE, TRUE
 
 np.random.seed(2)
 
+
 def tail_correction():
-    ''' this function gives an error correction for when potentials have a cut 
-    off, as used in periodic boundary conditions
+    ''' this function gives an error correction for when potentials have a
+    cutoff, as used in periodic boundary conditions.
 
     Inputs
     ------
@@ -28,19 +29,22 @@ def tail_correction():
     
     return 6.4*NP*e*np.pi*((1/5)*s**3*(L/2)**-5 - (1/11)*s**9*(L/2)**-11)
 
+
 def run_md(initial_r, initial_v, T_0, animation = FALSE):
-    ''' [explanation]
+    ''' Runs a canonical (NVT) molecular dynamics simulation with the parameters defined in
+    initial_conditions.parameters. Simulation uses periodic boundary conditions and velocity
+    scaling.
     
     Inputs
     ------
     initial_r: np.array(NP,3) of floats
-        list of vectors in a np.array containing the initail positions of all particles.
+        list of vectors in a np.array containing the initial positions of all particles.
     initial_v: np.array(NP,3) of floats 
-        list of vectors in a np.array containing the initail velocities of all particles.
+        list of vectors in a np.array containing the initial velocities of all particles.
     T_0: float
-        initial temperatrue of the simulation in units of e/kT
+        initial temperature of the simulation in units of e/kT
     animation: bool 
-        NOT CURRENTLY SET UP. if TRUE an animation of the simulation will play once calucations
+        NOT CURRENTLY SET UP. if TRUE an animation of the simulation will play once calculations
         are complete. 
 
     Outputs
@@ -67,19 +71,19 @@ def run_md(initial_r, initial_v, T_0, animation = FALSE):
 
     # import parameters
     params = ic.parameters()
-    dt =    params[0]
-    L =     int(params[1])
-    NP =    params[2]
-    t =     params[3]
-    s =     params[4]
-    e =     params[5]
+    dt = params[0]
+    L = int(params[1])
+    NP = params[2]
+    t = params[3]
+    s = params[4]
+    e = params[5]
 
     N = int(t / dt)
 
     # Allocating arrays for 2D problem: first axis - time. second axis - particle's number. third - coordinate
     v = np.zeros((N+1, NP, 3))
-    r = np.zeros((N+1, NP, 3)) # uses periodic boundary conditions
-    r_ = np.zeros((N+1, NP, 3)) # no periodic boundary conditions (needed for r_acf)
+    r = np.zeros((N+1, NP, 3))  # uses periodic boundary conditions
+    r_ = np.zeros((N+1, NP, 3))  # no periodic boundary conditions (needed for r_acf)
     f = np.zeros((N+1, NP, 3))
 
     E = np.zeros(N)
@@ -115,7 +119,7 @@ def run_md(initial_r, initial_v, T_0, animation = FALSE):
                             rij[k] = rij[k] + L
 
                     rij_abs = np.linalg.norm(rij)
-                    f[n,i] += 6*e*( 2*(s**12)/(rij_abs**13) - (s**6)/(rij_abs**7) ) * (rij/(rij_abs))
+                    f[n,i] += 6*e*( 2*(s**12)/(rij_abs**13) - (s**6)/(rij_abs**7) ) * (rij / rij_abs)
                     V[n] += 2*e*(((s/rij_abs)**12)-((s/rij_abs)**6)) + tail_corr #half usual V as it will be double counted
 
     print('Running dynamics')
@@ -130,13 +134,13 @@ def run_md(initial_r, initial_v, T_0, animation = FALSE):
         E[n] = K[n] + V[n]
         
         # advance time step
-        v[n+1] = v[n] + f[n] * dt #time is scaled by mass
+        v[n+1] = v[n] + f[n] * dt  # time is scaled by mass
         r[n+1] = r[n] + v[n+1] * dt
         r_[n+1] = r_[n] + v[n+1] * dt
-        r[n+1] = r[n+1] % L # periodic boundary conditions - perfect tiling
+        r[n+1] = r[n+1] % L  # periodic boundary conditions - perfect tiling
         
         T_n = K[n] / ((3/2)*NP)
-        v[n+1] = v[n+1]*np.sqrt(T_0/T_n) # scale velocities to give initial temp
+        v[n+1] = v[n+1]*np.sqrt(T_0/T_n)  # scale velocities to give initial temp
 
     t_finish = time.perf_counter()
     t_total = t_finish - t_start
